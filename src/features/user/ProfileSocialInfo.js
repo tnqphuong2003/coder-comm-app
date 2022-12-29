@@ -12,7 +12,7 @@ const IconStyle = styled(Box)(({ theme }) => ({
 }));
 
 function ProfileSocialInfo({ profile }) {
-  const { facbookLink, instagramLink, linkedinLink, twitterLink } = profile;
+  const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
 
   const SOCIALS = [
     {
@@ -40,7 +40,7 @@ function ProfileSocialInfo({ profile }) {
           <Facebook />
         </IconStyle>
       ),
-      href: facbookLink,
+      href: facebookLink,
     },
     {
       name: "Instagram",

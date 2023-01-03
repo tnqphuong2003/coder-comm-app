@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { COMMENTS_PER_POST } from "../../app/config";
+import { toast } from "react-toastify";
 
 const initialState = {
   isLoading: false,
@@ -44,6 +45,16 @@ const slice = createSlice({
       state.error = null;
       const { commentId, reactions } = action.payload;
       state.commentsById[commentId].reactions = reactions;
+    },
+    deleteCommentSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { commentId, postId } = action.payload;
+      delete state.commentsById[commentId];
+      state.commentsByPost[postId] = state.commentsByPost[postId].filter(
+        (comment) => comment !== commentId
+      );
+      state.totalCommentsByPost -= 1;
     },
   },
 });
@@ -99,5 +110,22 @@ export const sendCommentReaction =
       );
     } catch (error) {}
   };
+
+export const deleteComment = (commentId, postId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.delete(`/comments/${commentId}`);
+    dispatch(
+      slice.actions.deleteCommentSuccess({
+        commentId,
+        postId,
+      })
+    );
+    toast.success("Delete success");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+    toast.error(error.message);
+  }
+};
 
 export default slice.reducer;

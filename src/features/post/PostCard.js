@@ -143,7 +143,7 @@ function PostCard({ post }) {
           action={
             <>
               <IconButton onClick={handleClick}>
-                <MoreVert sx={{ fontSize: 30 }} />
+                <MoreVert sx={{ fontSize: 25 }} />
               </IconButton>
               {post.author._id === user._id && renderMenu}
             </>

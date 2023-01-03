@@ -1,10 +1,9 @@
-import React from "react";
+import { CssBaseline } from "@mui/material";
 import {
   alpha,
   createTheme,
   ThemeProvider as MUIThemeProvider,
 } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
 import customizeComponents from "./customizations";
 
 const PRIMARY = {
@@ -13,7 +12,7 @@ const PRIMARY = {
   main: "#00AB55",
   dark: "#007B55",
   darker: "#005249",
-  constrastText: "#FFF",
+  contrastText: "#FFF",
 };
 const SECONDARY = {
   lighter: "#D6E4FF",
@@ -21,7 +20,7 @@ const SECONDARY = {
   main: "#3366FF",
   dark: "#1939B7",
   darker: "#091A7A",
-  constrastText: "#FFF",
+  contrastText: "#FFF",
 };
 const SUCCESS = {
   lighter: "#E9FCD4",
@@ -29,7 +28,7 @@ const SUCCESS = {
   main: "#54D62C",
   dark: "#229A16",
   darker: "#08660D",
-  constrastText: "#FFF",
+  contrastText: "#FFF",
 };
 
 const GREY = {
@@ -59,32 +58,25 @@ function ThemeProvider({ children }) {
       primary: PRIMARY,
       secondary: SECONDARY,
       success: SUCCESS,
-      text: { primary: GREY[800], secondary: GREY[600], disable: GREY[500] },
+      text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
       background: { paper: "#fff", default: "#fff", neutral: GREY[200] },
       action: {
         active: GREY[600],
         hover: GREY[500_8],
         selected: GREY[500_16],
-        disable: GREY[500_80],
-        disableBackground: GREY[500_24],
+        disabled: GREY[500_80],
+        disabledBackground: GREY[500_24],
         focus: GREY[500_24],
         hoverOpacity: 0.08,
-        disableOpacity: 0.48,
+        disabledOpacity: 0.48,
       },
     },
     shape: { borderRadius: 8 },
-    // ---- (1) ----
-    // component: {
-    //   MuiLink: {
-    //     defaultProps: {
-    //       underline: "hover",
-    //     },
-    //   },
-    // },
   };
 
   const theme = createTheme(themeOptions);
-  theme.component = customizeComponents(theme); //  ---- (1) ----
+  theme.components = customizeComponents(theme);
+
   return (
     <MUIThemeProvider theme={theme}>
       <CssBaseline />

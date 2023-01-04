@@ -110,20 +110,18 @@ export const getPosts =
     }
   };
 
-export const editPost =
-  ({ content, image, postId }) =>
-  async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await apiService.put(`/posts/${postId}`, {
-        content,
-        image,
-      });
-      dispatch(slice.actions.editPostSuccess(response.data.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error.message));
-    }
-  };
+export const editPost = (content, image, postId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.put(`/posts/${postId}`, {
+      content,
+      image,
+    });
+    dispatch(slice.actions.editPostSuccess(response.data.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+  }
+};
 
 export const deletePost = (postId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());

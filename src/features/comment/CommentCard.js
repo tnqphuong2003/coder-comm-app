@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import useAuth from "../../hooks/useAuth";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
-import { deleteComment } from "./commentSlice";
+import { deleteComment, editComment } from "./commentSlice";
 
 const style = {
   position: "absolute",
@@ -49,8 +49,10 @@ function CommentCard({ comment }) {
     setAnchorEl(null);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
     handleMenuClose();
+    console.log(comment._id);
+    dispatch(editComment(comment._id, `cmt 3`));
   };
   const handleConfirm = () => {
     handleMenuClose();
@@ -135,7 +137,7 @@ function CommentCard({ comment }) {
             </Typography>
           </Stack>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {comment.content}
+            {comment.content} - {comment._id}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <CommentReaction comment={comment} />

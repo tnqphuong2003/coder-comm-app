@@ -56,6 +56,16 @@ const slice = createSlice({
       );
       state.totalCommentsByPost -= 1;
     },
+    editCommentSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      // const comments = action.payload;
+      // comments.forEach((comment) => {
+      //   state.commentsById[comment._id] = comment;
+      //   if (!state.commentsByPost.includes(comment._id))
+      //     state.currentPagePosts.push(comment._id);
+      // });
+    },
   },
 });
 
@@ -125,6 +135,19 @@ export const deleteComment = (commentId, postId) => async (dispatch) => {
   } catch (error) {
     dispatch(slice.actions.hasError(error));
     toast.error(error.message);
+  }
+};
+
+export const editComment = (commentId, content) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    console.log(content);
+    const response = await apiService.put(`/comments/${commentId}`, {
+      content,
+    });
+    dispatch(slice.actions.editCommentSuccess(...response.data.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
   }
 };
 

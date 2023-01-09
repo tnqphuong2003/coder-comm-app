@@ -98,9 +98,9 @@ function CommentCard({ comment }) {
       open={Boolean(anchorEl)}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleEdit} sx={{ mx: 1 }}>
+      {/* <MenuItem onClick={handleEdit} sx={{ mx: 1 }}>
         Edit comment
-      </MenuItem>
+      </MenuItem> */}
 
       <MenuItem onClick={handleConfirm} sx={{ mx: 1 }}>
         Delete comment

@@ -1,10 +1,11 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
 import isString from "lodash/isString";
 import { useDropzone } from "react-dropzone";
-import { Box, Stack, Typography } from "@mui/material";
-import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
+
+import { styled } from "@mui/material/styles";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import RejectionFiles from "./RejectionFiles";
+import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
+import { TouchAppOutlined } from "@mui/icons-material";
 
 const DropZoneStyle = styled("div")(({ theme }) => ({
   outline: "none",
@@ -16,7 +17,7 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
   transition: theme.transitions.create("padding"),
   backgroundColor: "#F4F6F8",
   border: `1px dashed alpha('#919EAB', 0.32)`,
-  "&:hover": { opacity: 0.72, cursor: "poiter" },
+  "&:hover": { opacity: 0.72, cursor: "pointer" },
 }));
 
 function UploadSingleFile({ error = false, file, helperText, sx, ...other }) {
@@ -30,6 +31,9 @@ function UploadSingleFile({ error = false, file, helperText, sx, ...other }) {
     multiple: false,
     ...other,
   });
+  console.log("getRootProps", getRootProps());
+  console.log("getInputProps", getInputProps());
+  console.log("other", other);
 
   return (
     <Box sx={{ width: "100%", ...sx }}>
@@ -40,7 +44,7 @@ function UploadSingleFile({ error = false, file, helperText, sx, ...other }) {
           ...((isDragReject || error) && {
             color: "error.main",
             borderColor: "error.light",
-            bgColor: "error.lighter",
+            bgcolor: "error.lighter",
           }),
           ...(file && {
             padding: "5% 0",
@@ -83,7 +87,7 @@ function UploadSingleFile({ error = false, file, helperText, sx, ...other }) {
             <img
               alt="file preview"
               src={isString(file) ? file : file.preview}
-            />
+            ></img>
           </Box>
         )}
       </DropZoneStyle>
@@ -93,6 +97,7 @@ function UploadSingleFile({ error = false, file, helperText, sx, ...other }) {
       )}
 
       {helperText && helperText}
+      {file && <Button onClick={other.onRemove}>Remove image</Button>}
     </Box>
   );
 }

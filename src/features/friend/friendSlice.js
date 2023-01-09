@@ -75,8 +75,10 @@ const slice = createSlice({
     cancelFriendRequestSuccess(state, action) {
       state.startLoading = false;
       state.error = null;
-      const { targetUserId } = action.payload;
+      const { targetUserId, users } = action.payload;
       state.userById[targetUserId].friendship = null;
+
+      state.totalUsers -= 1;
     },
     removeFriendRequestSuccess(state, action) {
       state.startLoading = false;

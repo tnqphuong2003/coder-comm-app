@@ -50,11 +50,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const { commentId, postId } = action.payload;
-      delete state.commentsById[commentId];
       state.commentsByPost[postId] = state.commentsByPost[postId].filter(
         (comment) => comment !== commentId
       );
-      state.totalCommentsByPost -= 1;
+      delete state.commentsById[commentId];
+      state.totalCommentsByPost[postId] -= 1;
     },
     editCommentSuccess(state, action) {
       state.isLoading = false;

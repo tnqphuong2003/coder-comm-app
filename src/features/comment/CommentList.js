@@ -33,6 +33,7 @@ function CommentList({ postId }) {
   let renderComments;
   if (commentsByPost) {
     const comments = commentsByPost.map((commentId) => commentsById[commentId]);
+    console.log("comments", commentsByPost);
     renderComments = (
       <Stack spacing={1.5}>
         {comments.map((comment) => (

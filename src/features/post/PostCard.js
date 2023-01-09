@@ -1,5 +1,7 @@
 import { MoreVert } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
+  alpha,
   Avatar,
   Box,
   Button,
@@ -11,18 +13,18 @@ import {
   MenuItem,
   Modal,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { fDate } from "../../utils/formatTime";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
-import PostForm from "./PostForm";
 import PostReaction from "./PostReaction";
-import { deletePost } from "./postSlice";
+import { deletePost, editPost } from "./postSlice";
 
 const style = {
   position: "absolute",
@@ -37,12 +39,20 @@ const style = {
 };
 
 function PostCard({ post }) {
+  const [newContent, setNewContent] = useState(post.content);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [open, setOpen] = React.useState(false);
   const handleModalOpen = () => setOpen(true);
   const handleModalClose = () => {
     setOpen(false);
+  };
+
+  const [open1, setOpen1] = React.useState(false);
+  const handleModal1Open = () => setOpen1(true);
+  const handleModal1Close = () => {
+    setOpen1(false);
   };
 
   const { user } = useAuth();
@@ -55,8 +65,9 @@ function PostCard({ post }) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleEdit = () => {
+  const handleOpenEditForm = () => {
     handleMenuClose();
+    handleModal1Open();
   };
   const handleConfirm = () => {
     handleMenuClose();
@@ -65,6 +76,16 @@ function PostCard({ post }) {
   const handleDelete = () => {
     handleModalClose();
     dispatch(deletePost(post._id));
+  };
+
+  const handleEditPost = (e) => {
+    handleModal1Close();
+    dispatch(editPost(newContent, post.image, post._id));
+  };
+
+  const handleDiscard = () => {
+    handleModal1Close();
+    setNewContent(post.content);
   };
 
   const renderModal = (
@@ -86,6 +107,103 @@ function PostCard({ post }) {
     </Modal>
   );
 
+  const renderModal1 = (
+    <Modal
+      open={open1}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Card
+        sx={{
+          mb: 2,
+          width: "600px",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <CardHeader
+          disableTypography
+          avatar={
+            <Avatar src={post?.author?.avatarUrl} alt={post?.author?.name} />
+          }
+          title={
+            <Link
+              variant="subtitle2"
+              color="text.primary"
+              conponent={RouterLink}
+              sx={{ fontWeight: 600 }}
+              to={`/user/${post.author._id}`}
+            >
+              {post?.author?.name}
+            </Link>
+          }
+          subheader={
+            <Typography
+              variant="caption"
+              sx={{ display: "block", color: "text.secondary" }}
+            >
+              {fDate(post.createdAt)}
+            </Typography>
+          }
+        ></CardHeader>
+        <Stack spacing={2} sx={{ p: 3 }}>
+          <TextField
+            id="outlined-multiline-flexible"
+            multiline
+            maxRows={4}
+            fullWidth
+            sx={{
+              "& fieldset": {
+                borderWidth: `1px !important`,
+                borderColor: alpha("#919EAB", 0.32),
+              },
+            }}
+            value={newContent}
+            onChange={(e) => setNewContent(e.target.value)}
+          />
+          {post.image && (
+            <Box
+              sx={{
+                borderRadius: 2,
+                overflow: "hidden",
+                height: 300,
+                "& img": { objectFit: "cover", width: 1, height: 1 },
+              }}
+            >
+              <img src={post.image} alt="post" />
+            </Box>
+          )}
+          <Box
+            direction="row"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ mr: 2 }}
+              onClick={handleDiscard}
+            >
+              Discard
+            </Button>
+            <LoadingButton
+              variant="contained"
+              size="small"
+              onClick={handleEditPost}
+            >
+              Save
+            </LoadingButton>
+          </Box>
+        </Stack>
+      </Card>
+    </Modal>
+  );
+
   const renderMenu = (
     <Menu
       id="long-menu"
@@ -102,7 +220,7 @@ function PostCard({ post }) {
       open={Boolean(anchorEl)}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleEdit} sx={{ mx: 1 }}>
+      <MenuItem onClick={handleOpenEditForm} sx={{ mx: 1 }}>
         Edit post
       </MenuItem>
 
@@ -150,7 +268,7 @@ function PostCard({ post }) {
           }
         ></CardHeader>
         <Stack spacing={2} sx={{ p: 3 }}>
-          <Typography>{post.content}</Typography>
+          <Typography>{newContent}</Typography>
           {post.image && (
             <Box
               sx={{
@@ -169,6 +287,7 @@ function PostCard({ post }) {
           <CommentForm postId={post._id} />
         </Stack>
       </Card>
+      {renderModal1}
     </>
   );
 }

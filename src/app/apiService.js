@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./config";
 
-require("dotenv").config();
 const apiService = axios.create({
   baseURL: BASE_URL,
 });
